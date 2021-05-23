@@ -14,25 +14,20 @@ source:
 
 build:
   merge_build_host: True  # [win]
-  number: 1
+  number: 0
+  noarch: generic
   rpaths:
     - lib/R/lib/
     - lib/
 
 requirements:
   build:
-    - {{ compiler('c') }}              # [not win]
-    - {{ compiler('m2w64_c') }}        # [win]
-    - {{ posix }}filesystem        # [win]
-    - {{ posix }}make
-    - {{ posix }}sed               # [win]
-    - {{ posix }}coreutils         # [win]
     - {{ posix }}zip               # [win]
+    - cross-r-base {{ r_base }}    # [build_platform != target_platform]
   host:
     - r-base
   run:
     - r-base
-    - {{ native }}gcc-libs         # [win]
 
 test:
   commands:
@@ -41,12 +36,13 @@ test:
 
 about:
   home: https://CRAN.R-project.org/package=GWASExactHW
-  license: GPL-3
+  license: GPL-3.0-only
   summary: This package contains a function to do exact Hardy-Weinburg testing (using Fisher's
     test) for SNP genotypes as typically obtained in a Genome Wide Association Study
     (GWAS).
   license_family: GPL3
-  license_file: '{{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-3'
+  license_file:
+    - {{ environ["PREFIX"] }}/lib/R/share/licenses/GPL-3
 
 extra:
   recipe-maintainers:
